@@ -1,0 +1,16 @@
+.terraform/
+.terraform.lock.hcl
+*.tfstate
+*.tfstate.*
+*.tfplan
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+*.backup
+*.pem
+*.key
+*.crt
+*.log
+.DS_Store
+Thumbs.db
