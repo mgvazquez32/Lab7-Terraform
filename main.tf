@@ -13,7 +13,7 @@ resource "aws_subnet" "lab_public_subnet1" {
   cidr_block              = "10.0.0.0/24"
   availability_zone       = "us-east-1a"
   map_public_ip_on_launch = true
-  tags                    = { Name = "lab-subnet-public1-us-east-1a" }
+  tags                    = { Name = "lab-subnet-public1" }
 }
 
 resource "aws_subnet" "lab_public_subnet2" {
@@ -21,7 +21,7 @@ resource "aws_subnet" "lab_public_subnet2" {
   cidr_block              = "10.0.2.0/24"
   availability_zone       = "us-east-1a"
   map_public_ip_on_launch = true
-  tags                    = { Name = "lab-subnet-public2-us-east-1a" }
+  tags                    = { Name = "lab-subnet-public2" }
 }
 
 # Privadas
@@ -29,14 +29,14 @@ resource "aws_subnet" "lab_private_subnet1" {
   vpc_id            = aws_vpc.lab_vpc.id
   cidr_block        = "10.0.1.0/24"
   availability_zone = "us-east-1a"
-  tags              = { Name = "lab-subnet-private1-us-east-1a" }
+  tags              = { Name = "lab-subnet-private1" }
 }
 
 resource "aws_subnet" "lab_private_subnet2" {
   vpc_id            = aws_vpc.lab_vpc.id
   cidr_block        = "10.0.3.0/24"
   availability_zone = "us-east-1a"
-  tags              = { Name = "lab-subnet-private2-us-east-1a" }
+  tags              = { Name = "lab-subnet-private2" }
 }
 
 # ------- Route Tables (sin rutas por defecto a Internet en sandbox) -------
@@ -47,7 +47,7 @@ resource "aws_route_table" "public_route_table" {
 
 resource "aws_route_table" "private_route_table" {
   vpc_id = aws_vpc.lab_vpc.id
-  tags   = { Name = "lab-rtb-private1-us-east-1a" }
+  tags   = { Name = "lab-rtb-private1" }
 }
 
 # ------- Asociaciones de TODAS las subnets a su tabla correspondiente ------
@@ -74,7 +74,7 @@ resource "aws_route_table_association" "lab_rt_assoc_private_2" {
 }
 # Security Group para HTTP
 resource "aws_security_group" "web_sg" {
-  name        = "web-security-group" # sin espacios
+  name        = "web-security-group" 
   description = "Enable HTTP access"
   vpc_id      = aws_vpc.lab_vpc.id
 
@@ -113,7 +113,7 @@ data "aws_ami" "al2" {
   }
 }
 
-# Instancia EC2 en Public Subnet 2, con IP pública y SG de HTTP
+# Instancia EC2 
 resource "aws_instance" "web1" {
   ami                         = data.aws_ami.al2.id
   instance_type               = "t2.micro"
@@ -123,7 +123,7 @@ resource "aws_instance" "web1" {
 
   user_data = file("${path.module}/user_data.sh")
 
-  # Almacenamiento (opcional: 10 GiB gp3)
+  # Almacenamiento
   root_block_device {
     volume_size = 10
     volume_type = "gp3"
