@@ -6,7 +6,7 @@ resource "aws_vpc" "lab_vpc" {
   tags                 = { Name = "lab-vpc" }
 }
 
-# ------- Subnets (us-east-1a todas; podés repartir a 1b si querés) -------
+# ------- Subnets (us-east-1a) -------
 # Públicas
 resource "aws_subnet" "lab_public_subnet1" {
   vpc_id                  = aws_vpc.lab_vpc.id
@@ -39,7 +39,7 @@ resource "aws_subnet" "lab_private_subnet2" {
   tags              = { Name = "lab-subnet-private2" }
 }
 
-# ------- Route Tables (sin rutas por defecto a Internet en sandbox) -------
+# ------- Route Tables -------
 resource "aws_route_table" "public_route_table" {
   vpc_id = aws_vpc.lab_vpc.id
   tags   = { Name = "lab-rtb-public" }
@@ -50,7 +50,7 @@ resource "aws_route_table" "private_route_table" {
   tags   = { Name = "lab-rtb-private1" }
 }
 
-# ------- Asociaciones de TODAS las subnets a su tabla correspondiente ------
+# ------- Asociaciones subnets ------
 # Públicas -> public_route_table
 resource "aws_route_table_association" "lab_rt_assoc_public_1" {
   subnet_id      = aws_subnet.lab_public_subnet1.id
@@ -78,7 +78,7 @@ resource "aws_security_group" "web_sg" {
   description = "Enable HTTP access"
   vpc_id      = aws_vpc.lab_vpc.id
 
-  # HTTP 80 desde cualquier origen
+  # HTTP 80 
   ingress {
     description      = "Permit web requests"
     from_port        = 80
@@ -88,7 +88,7 @@ resource "aws_security_group" "web_sg" {
     ipv6_cidr_blocks = ["::/0"]
   }
 
-  # Egresos liberados (recomendado por defecto)
+  # Egresos 
   egress {
     description      = "Allow all egress traffic"
     from_port        = 0
@@ -102,7 +102,7 @@ resource "aws_security_group" "web_sg" {
     Name = "Web Security Group"
   }
 }
-# AMI Amazon Linux 2 (x86_64, HVM, gp2) más reciente en us-east-1
+# AMI Amazon Linux 2 
 data "aws_ami" "al2" {
   most_recent = true
   owners      = ["amazon"]
@@ -143,7 +143,7 @@ resource "aws_internet_gateway" "lab_igw" {
   }
 }
 
-# Ruta default en la tabla de ruteo pública hacia el IGW
+# Ruta default IGW
 resource "aws_route" "public_internet_access" {
   route_table_id         = aws_route_table.public_route_table.id
   destination_cidr_block = "0.0.0.0/0"
