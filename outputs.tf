@@ -11,15 +11,15 @@ output "web_security_group_id" {
 }
 output "web1_public_ip" {
   value       = aws_instance.web1.public_ip
-  description = "IP pública de la EC2 web1"
+  description = "IP pública EC2 web1"
 }
 
 output "web1_private_ip" {
   value       = aws_instance.web1.private_ip
-  description = "IP privada de la EC2 web1"
+  description = "IP privada EC2 web1"
 }
 
 output "web1_url" {
   value       = "http://${aws_instance.web1.public_ip}/"
-  description = "URL HTTP de la EC2 web1 (requiere IGW para ser accesible desde Internet)"
+  description = "URL HTTP EC2 web1)"
 }
